@@ -380,17 +380,16 @@
                 border-radius: 50%;
                 margin: 0 auto 20px;
                 padding: 15px;
-                background: #f8f9fa;
+                background: rgba(0,123,255,0.1);
                 display: block;
             }
 
             .service-card {
                 text-align: center;
                 padding: 30px;
-                background: #ffffff;
+                background: rgba(255,255,255,0.05);
                 border-radius: 15px;
                 transition: transform 0.3s ease;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             }
 
             .service-card:hover {
@@ -401,21 +400,20 @@
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
                 gap: 30px;
-                padding: 20px;
+                padding: 40px;
             }
 
             /* Mobile Responsive Styles */
             @media (max-width: 768px) {
                 .services-grid {
                     grid-template-columns: 1fr;
-                    padding: 15px;
-                    gap: 15px;
+                    padding: 20px;
+                    gap: 20px;
                 }
 
                 .service-card {
-                    margin-bottom: 15px;
+                    margin-bottom: 20px;
                     padding: 20px;
-                    background: #ffffff;
                 }
 
                 .service-icon {
@@ -426,35 +424,34 @@
 
                 .about-content {
                     flex-direction: column;
-                    padding: 15px;
+                    padding: 20px;
                 }
 
                 .about-text {
-                    margin-bottom: 25px;
+                    margin-bottom: 30px;
                     text-align: center;
                 }
 
                 .about-stats {
                     grid-template-columns: repeat(2, 1fr);
-                    gap: 15px;
+                    gap: 20px;
                 }
 
                 .stat {
                     padding: 15px;
                     text-align: center;
-                    background: #ffffff;
+                    background: rgba(255,255,255,0.05);
                     border-radius: 10px;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
                 }
 
                 .stat h3 {
-                    font-size: 1.6em;
+                    font-size: 1.8em;
                     color: #007bff;
                 }
 
                 .stat p {
                     font-size: 0.9em;
-                    color: #333333;
+                    color: #cccccc;
                 }
             }
         </style>
