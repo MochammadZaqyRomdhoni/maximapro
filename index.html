@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAXIMA DIGITAL</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        @media (max-width: 768px) {
+            * {
+                cursor: pointer;
+                touch-action: manipulation;
+            }
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            padding: 25px;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: 0.4s;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover {
+            background: #007bff;
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+        }
+
+        #threejs-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #007bff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.5em;
+            color: #ffffff;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 120px 20px;
+            background: #111111;
+            color: white;
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #007bff;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: rgba(255,255,255,0.05);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            transition: 0.4s;
+            backdrop-filter: blur(10px);
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .service-card h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .service-card p {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" style="display: none;">
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <div class="nav-links">
+            <a href="#home" data-aos="fade-down" data-aos-delay="100">Beranda</a>
+            <a href="#services" data-aos="fade-down" data-aos-delay="200">Layanan</a>
+            <a href="#about" data-aos="fade-down" data-aos-delay="300">Tentang</a>
+            <a href="#contact" data-aos="fade-down" data-aos-delay="400">Kontak</a>
+        </div>
+        <style>
+            .nav-toggle-label {
+                display: none;
+                cursor: pointer;
+                padding: 15px;
+            }
+            
+            .nav-toggle-label span {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background: white;
+                margin: 5px 0;
+                transition: 0.4s;
+            }
+
+            @media (max-width: 768px) {
+                .nav-toggle-label {
+                    display: block;
+                    position: absolute;
+                    right: 20px;
+                    top: 20px;
+                }
+                
+                .nav-links {
+                    display: none;
+                    flex-direction: column;
+                    position: absolute;
+                    top: 70px;
+                    left: 0;
+                    width: 100%;
+                    background: rgba(0,0,0,0.9);
+                    padding: 20px 0;
+                }
+                
+                .nav-toggle:checked ~ .nav-links {
+                    display: flex;
+                }
+                
+                .nav-toggle:checked + .nav-toggle-label span:nth-child(1) {
+                    transform: rotate(45deg) translate(5px, 5px);
+                }
+                
+                .nav-toggle:checked + .nav-toggle-label span:nth-child(2) {
+                    opacity: 0;
+                }
+                
+                .nav-toggle:checked + .nav-toggle-label span:nth-child(3) {
+                    transform: rotate(-45deg) translate(7px, -7px);
+                }
+                
+                .nav-links a {
+                    padding: 15px 0;
+                    text-align: center;
+                }
+            }
+        </style>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div id="threejs-container"></div>
+        <div class="hero-content">
+            <h1 data-aos="fade-up">Maxima Digital</h1>
+            <p data-aos="fade-up" data-aos-delay="200">Transformasi Digital untuk Masa Depan yang Lebih Baik</p>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <h2 data-aos="fade-up">Layanan Kami</h2>
+        <div class="services-grid">
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-icon-container">
+                    <img src="repair-gear-with-circuit-technology-inside-free-vector-removebg-preview.png" alt="Digital Transformation" class="service-icon" style="object-fit: contain; aspect-ratio: 1/1;">
+                </div>
+                <h3>Digital Transformation</h3>
+                <p>Transformasi bisnis Anda ke era digital dengan solusi inovatif</p>
+            </div>
+            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-icon-container">
+                    <img src="ai.png" alt="AI Solutions" class="service-icon" style="object-fit: contain; aspect-ratio: 1/1;">
+                </div>
+                <h3>AI Solutions</h3>
+                <p>Implementasi kecerdasan buatan untuk optimasi bisnis</p>
+            </div>
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-icon-container">
+                    <img src="cloud.png" alt="Cloud Services" class="service-icon" style="object-fit: contain; aspect-ratio: 1/1;">
+                </div>
+                <h3>Cloud Services</h3>
+                <p>Solusi cloud computing yang aman dan scalable</p>
+            </div>
+            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="service-icon-container">
+                    <img src="png-clipart-website-development-mobile-app-development-application-software-web-application-web-design-web-design-logo-removebg-preview.png" alt="Mobile Development" class="service-icon" style="object-fit: contain; aspect-ratio: 1/1;">
+                </div>
+                <h3>Mobile Development</h3>
+                <p>Pengembangan aplikasi mobile Android dan iOS yang modern</p>
+            </div>
+            <div class="service-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="service-icon-container">
+                    <img src="web.png" alt="Web Development" class="service-icon" style="object-fit: contain; aspect-ratio: 1/1;">
+                </div>
+                <h3>Web Development</h3>
+                <p>Pembuatan website responsif dengan teknologi terkini</p>
+            </div>
+            <div class="service-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-icon-container">
+                    <img src="industry-40-iot-smart-factory-concept-logo-vector-illustration-2BN70G4-removebg-preview.png" alt="IoT Development" class="service-icon" style="object-fit: contain; aspect-ratio: 1/1;">
+                </div>
+                <h3>IoT Development</h3>
+                <p>Pembuatan internet of things untuk optimasi bisnis</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2 data-aos="fade-up">Tentang Kami</h2>
+        <div class="about-content">
+            <div class="about-text" data-aos="fade-right">
+                <p>Maxima Digital adalah perusahaan teknologi yang berfokus pada transformasi digital dan inovasi teknologi. Kami membantu perusahaan untuk berkembang di era digital dengan solusi yang tepat guna dan berkelanjutan.</p>
+                <p>Dengan tim ahli yang berpengalaman, kami berkomitmen untuk memberikan layanan terbaik dan solusi inovatif untuk setiap tantangan digital yang dihadapi klien kami.</p>
+            </div>
+            <div class="about-stats" data-aos="fade-left">
+                <div class="stat">
+                    <h3>100+</h3>
+                    <p>Proyek Selesai</p>
+                </div>
+                <div class="stat">
+                    <h3>50+</h3>
+                    <p>Klien Puas</p>
+                </div>
+                <div class="stat">
+                    <h3>5+</h3>
+                    <p>Tahun Pengalaman</p>
+                </div>
+                <div class="stat">
+                    <h3>25+</h3>
+                    <p>Tim Ahli</p>
+                </div>
+                <div class="stat">
+                    <h3>10+</h3>
+                    <p>Penghargaan</p>
+                </div>
+                <div class="stat">
+                    <h3>95%</h3>
+                    <p>Tingkat Kepuasan</p>
+                </div>
+            </div>
+        </div>
+        <style>
+            .service-icon {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                margin: 0 auto 20px;
+                padding: 15px;
+                background: rgba(0,123,255,0.1);
+                display: block;
+            }
+
+            .service-card {
+                text-align: center;
+                padding: 30px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 15px;
+                transition: transform 0.3s ease;
+            }
+
+            .service-card:hover {
+                transform: translateY(-10px);
+            }
+
+            .services-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 30px;
+                padding: 40px;
+            }
+
+            /* Mobile Responsive Styles */
+            @media (max-width: 768px) {
+                .services-grid {
+                    grid-template-columns: 1fr;
+                    padding: 20px;
+                    gap: 20px;
+                }
+
+                .service-card {
+                    margin-bottom: 20px;
+                    padding: 20px;
+                }
+
+                .service-icon {
+                    width: 60px;
+                    height: 60px;
+                    margin-bottom: 15px;
+                }
+
+                .about-content {
+                    flex-direction: column;
+                    padding: 20px;
+                }
+
+                .about-text {
+                    margin-bottom: 30px;
+                    text-align: center;
+                }
+
+                .about-stats {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 20px;
+                }
+
+                .stat {
+                    padding: 15px;
+                    text-align: center;
+                    background: rgba(255,255,255,0.05);
+                    border-radius: 10px;
+                }
+
+                .stat h3 {
+                    font-size: 1.8em;
+                    color: #007bff;
+                }
+
+                .stat p {
+                    font-size: 0.9em;
+                    color: #cccccc;
+                }
+            }
+        </style>
+    </section>
+
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 data-aos="fade-up">Hubungi Kami</h2>
+        <div class="contact-container">
+            <div class="contact-info" data-aos="fade-right">
+                <div class="info-item">
+                    <h3>Alamat</h3>
+                    <p>Kp.cidahu, RT.15/RW04, Padasuka, Kec. Sukarame, Kabupaten Tasikmalaya, Jawa Barat 46461</p>
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.4649!2d108.2147!3d-7.3123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6f5f5f5f5f5f5f%3A0x2e6f5f5f5f5f5f5f!2sPadasuka%2C%20Kec.%20Sukarame%2C%20Kabupaten%20Tasikmalaya%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1629788123456!5m2!1sid!2sid" 
+                            width="100%" 
+                            height="200" 
+                            style="border:0; border-radius:10px;" 
+                            allowfullscreen="" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <h3>Email</h3>
+                    <p>zqyrmdhny@gmail.com</p>
+                </div>
+                <div class="info-item">
+                    <h3>WhatsApp</h3>
+                    <a href="https://wa.me/6283897731841" class="whatsapp-button">
+                        <i class="fab fa-whatsapp"></i> Chat via WhatsApp
+                    </a>
+                </div>
+            </div>
+            <form class="contact-form" data-aos="fade-left" onsubmit="sendEmail(event)" style="margin-bottom: 50px;">
+                <input type="text" id="fullName" placeholder="Nama Lengkap" style="padding: 15px; font-size: 16px; margin-bottom: 20px;" required>
+                <input type="email" id="email" placeholder="Email" style="padding: 15px; font-size: 16px; margin-bottom: 20px;" required>
+                <textarea id="message" placeholder="Tulis pesan Anda di sini..." style="padding: 15px; font-size: 16px; min-height: 200px; margin-bottom: 30px;" required></textarea>
+                <button type="submit" class="submit-btn" style="padding: 20px; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; background: #007bff; color: white; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; width: 100%; margin-bottom: 50px;">
+                    <i class="far fa-envelope"></i> Kirim Email
+                </button>
+            </form>
+            <script>
+                function sendEmail(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('fullName').value;
+                    const email = document.getElementById('email').value;
+                    const message = document.getElementById('message').value;
+                    
+                    const mailtoLink = `mailto:zqyrmdhny@gmail.com?subject=Pesan dari ${name}&body=Nama: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0APesan:%0D%0A${message}`;
+                    window.location.href = mailtoLink;
+                }
+            </script>
+        </div>
+    </section>
+    <footer style="background: #111; color: #fff; text-align: center; padding: 20px;">
+        <p>&copy; 2024 MAXIMA DIGITAL. All rights reserved.</p>
+    </footer>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            background: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-button i {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .map-container {
+            margin-top: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <style>
+        /* About Section Styles */
+        .about {
+            padding: 100px 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .about h2 {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #cccccc;
+        }
+
+        .about-stats {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,123,255,0.1);
+            border-radius: 10px;
+        }
+
+        .stat h3 {
+            color: #007bff;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        /* Contact Section Styles */
+        .contact {
+            padding: 100px 20px;
+            background: #2a2a2a;
+            color: white;
+        }
+
+        .contact h2 {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 50px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .info-item {
+            margin-bottom: 30px;
+        }
+
+        .info-item h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .info-item p {
+            color: #cccccc;
+        }
+
+        .contact-form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .contact-form textarea {
+            height: 150px;
+            resize: none;
+        }
+
+        .contact-form button {
+            padding: 15px 30px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .contact-form button:hover {
+            background: #0056b3;
+        }
+    </style>
+
+    <script>
+        // Inisialisasi AOS
+        AOS.init();
+
+        // Three.js Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('threejs-container').appendChild(renderer.domElement);
+
+        // Membuat cube dengan efek wireframe
+        const geometry = new THREE.BoxGeometry(5, 5, 5);
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x007bff,
+            wireframe: true,
+            wireframeLinewidth: 2
+        });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // Text di tengah cube
+        const textGeometry = new THREE.TextGeometry('DIGITAL', {
+            size: 1,
+            height: 0.2,
+        });
+        const textMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+        textMesh.position.set(-2, 0, 0);
+        scene.add(textMesh);
+
+        // Pencahayaan
+        const light1 = new THREE.PointLight(0x007bff, 1, 100);
+        light1.position.set(10, 10, 10);
+        scene.add(light1);
+
+        const light2 = new THREE.PointLight(0x00ff88, 1, 100);
+        light2.position.set(-10, -10, -10);
+        scene.add(light2);
+
+        camera.position.z = 10;
+
+        // Animasi
+        function animate() {
+            requestAnimationFrame(animate);
+            cube.rotation.x += 0.005;
+            cube.rotation.y += 0.005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive handling
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
